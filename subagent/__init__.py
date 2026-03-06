@@ -1,15 +1,49 @@
-from .core import Agent, AgentMode, AgentResult, AgentStep, run_agent
-from .model import LanguageModel, OpenAICompatibleModel
-from .tools import Tool, tool
+from .core import (
+    Agent,
+    AgentConfig,
+    AgentManager,
+    AgentMode,
+    AgentResult,
+    AgentState,
+    AgentStep,
+    BUILT_IN_AGENTS,
+    Permission,
+    PermissionAction,
+    run_agent,
+)
+from .model import (
+    AnthropicModel,
+    ChatMessage,
+    LanguageModel,
+    LiteLLMModel,
+    MessageRole,
+    OpenAICompatibleModel,
+    TokenUsage,
+    create_model,
+)
+from .tools import Tool, ToolCollection, tool
 
 __all__ = [
     "Agent",
-    "AgentMode", 
+    "AgentConfig",
+    "AgentManager",
+    "AgentMode",
     "AgentResult",
+    "AgentState",
     "AgentStep",
+    "BUILT_IN_AGENTS",
+    "Permission",
+    "PermissionAction",
     "run_agent",
+    "AnthropicModel",
+    "ChatMessage",
     "LanguageModel",
+    "LiteLLMModel",
+    "MessageRole",
     "OpenAICompatibleModel",
+    "TokenUsage",
+    "create_model",
     "Tool",
+    "ToolCollection",
     "tool",
 ]
