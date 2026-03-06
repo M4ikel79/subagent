@@ -209,10 +209,7 @@ def main(
     goal: str = typer.Argument(..., help="Natural language task"),
     mode: str = typer.Option("plan", help="Agent mode: single_step or plan"),
     max_steps: int = typer.Option(5, help="Max steps for plan mode"),
-    model_type: str = typer.Option(
-        "openai", help="Model type: openai, anthropic, nvidia, minimax, ollama, litellm"
-    ),
-    model_id: str = typer.Option("gpt-4o-mini", help="Model ID"),
+    model_id: str = typer.Option("glm-4.6", help="Ollama model ID"),
     tool: list[str] = typer.Option(
         ["read_file", "list_directory", "web_fetch", "bash"],
         "--tool",
@@ -224,31 +221,10 @@ def main(
         help=f"Use built-in agent: {', '.join(BUILT_IN_AGENTS.keys())}",
     ),
     stream: bool = typer.Option(False, "--stream", help="Stream agent output"),
-    api_base: Optional[str] = typer.Option(None, help="API base URL"),
     temperature: float = typer.Option(0.7, help="Temperature for model"),
     permissions: Optional[str] = typer.Option(None, help="JSON permissions config"),
-    save_state: Optional[str] = typer.Option(
-        None, "--save-state", help="Save agent state to file"
-    ),
-    load_state: Optional[str] = typer.Option(
-        None, "--load-state", help="Load agent state from file"
-    ),
 ):
-    api_key = os.environ.get("OPENAI_API_KEY")
-    if model_type == "anthropic":
-        api_key = os.environ.get("ANTHROPIC_API_KEY")
-    elif model_type == "nvidia":
-        api_key = os.environ.get("NVIDIA_API_KEY")
-    elif model_type == "minimax":
-        api_key = os.environ.get("MINIMAX_API_KEY")
-    elif model_type == "ollama":
-        api_key = os.environ.get("OLLAMA_API_KEY")
-
-    if not api_key and model_type != "ollama":
-        console.print(
-            f"[red]Error: API key not set. Set {model_type.upper()}_API_KEY[/red]"
-        )
-        raise typer.Exit(1)
+    api_key = os.environ.get("OLLAMA_API_KEY")
 
     enabled_tools = []
     for t in tool:
@@ -289,21 +265,16 @@ def main(
     )
 
     try:
-        model_kwargs = {"temperature": temperature}
-        if api_base:
-            model_kwargs["api_base"] = api_base
-
         result = run_agent(
             goal=goal,
             mode=mode,
             tools=enabled_tools,
-            model_type=model_type,
             model_id=model_id,
             max_steps=max_steps,
             agent_name=agent or "default",
             permissions=agent_permissions,
             stream=stream,
-            **model_kwargs,
+            temperature=temperature,
         )
 
         if stream:

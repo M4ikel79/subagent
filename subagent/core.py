@@ -512,19 +512,19 @@ def run_agent(
     tools: list[Tool] | None = None,
     model: LanguageModel | None = None,
     max_steps: int = 5,
-    model_type: str = "openai",
-    model_id: str = "gpt-4o-mini",
+    model_id: str = "glm-4.6",
     agent_name: str = "default",
     permissions: dict[str, str] | None = None,
     stream: bool = False,
-    **model_kwargs,
+    temperature: float = 0.7,
+    api_key: str | None = None,
 ) -> AgentResult | Generator[AgentStep, None, None]:
-    from .model import create_model
+    from .model import OllamaModel
 
     agent_mode = AgentMode(mode) if mode == "single_step" else AgentMode.PLAN
 
     if model is None:
-        model = create_model(model_type, model_id, **model_kwargs)
+        model = OllamaModel(model_id=model_id, temperature=temperature, api_key=api_key)
 
     tool_collection = ToolCollection(tools or [])
 
