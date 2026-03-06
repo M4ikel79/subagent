@@ -210,7 +210,7 @@ def main(
     mode: str = typer.Option("plan", help="Agent mode: single_step or plan"),
     max_steps: int = typer.Option(5, help="Max steps for plan mode"),
     model_type: str = typer.Option(
-        "openai", help="Model type: openai, anthropic, litellm"
+        "openai", help="Model type: openai, anthropic, nvidia, litellm"
     ),
     model_id: str = typer.Option("gpt-4o-mini", help="Model ID"),
     tool: list[str] = typer.Option(
@@ -237,10 +237,12 @@ def main(
     api_key = os.environ.get("OPENAI_API_KEY")
     if model_type == "anthropic":
         api_key = os.environ.get("ANTHROPIC_API_KEY")
+    elif model_type == "nvidia":
+        api_key = os.environ.get("NVIDIA_API_KEY")
 
     if not api_key:
         console.print(
-            f"[red]Error: API key not set. Set {'OPENAI_API_KEY' if model_type != 'anthropic' else 'ANTHROPIC_API_KEY'}[/red]"
+            f"[red]Error: API key not set. Set {'OPENAI_API_KEY' if model_type not in ['anthropic', 'nvidia'] else model_type.upper() + '_API_KEY'}[/red]"
         )
         raise typer.Exit(1)
 
