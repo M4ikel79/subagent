@@ -1,0 +1,21 @@
+[project]
+name = "subagent"
+version = "0.1.0"
+description = "Minimal sub-agent CLI for orchestration and standalone use"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "requests>=2.32.5",
+    "rich>=14.3.3",
+    "typer[all]>=0.24.1",
+]
+
+[project.scripts]
+subagent = "subagent.cli:app"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.uv]
+dev-dependencies = []
